@@ -20,12 +20,6 @@
 #include <thread>
 #include <map>
 
-
-// Needed for isKeyPressed
-#include <unistd.h>
-#include <termios.h>
-#include <fcntl.h>
-
 using namespace std::chrono_literals;
 using namespace std;
 
@@ -34,7 +28,6 @@ static const int NUM_FINGERS_ON_HAND = 5;
 // Global for now to pass joint data between the Manus SDK and ROS2
 float g_euler_joint[24][3] = {0.0};
 
-bool KeyDown();
 
 class JointLimits
 {
@@ -76,7 +69,7 @@ std::map<std::string, JointLimits> joint_limits = {
 	{"pinky_pitch", JointLimits(0, 1.05)},
 	{"pinky_knuckle", JointLimits(0, 0.785)},
 	{"pinky_tip", JointLimits(0, 0.785)},
-	{"thumb_yaw", JointLimits(0, 0.872)},
+	{"thumb_yaw", JointLimits(-0.52, 0.0872665)},
 	{"thumb_roll", JointLimits(0, 0.349)},
 	{"thumb_pitch", JointLimits(0, 1.047)},
 	{"thumb_knuckle", JointLimits(0, 0.785)},
@@ -166,62 +159,69 @@ private:
 	{
 		auto joint_state = sensor_msgs::msg::JointState();
 
-		joint_state.name.push_back("wrist_pitch_lower");
-		joint_state.name.push_back("wrist_pitch_upper");
-		joint_state.name.push_back("wrist_yaw");
-		joint_state.name.push_back("index_yaw");
-		joint_state.name.push_back("middle_yaw");
-		joint_state.name.push_back("ring_yaw");
-		joint_state.name.push_back("pinky_yaw");
-		joint_state.name.push_back("index_pitch");
-		joint_state.name.push_back("index_knuckle");
-		joint_state.name.push_back("index_tip");
-		joint_state.name.push_back("middle_pitch");
-		joint_state.name.push_back("middle_knuckle");
-		joint_state.name.push_back("middle_tip");
-		joint_state.name.push_back("ring_pitch");
-		joint_state.name.push_back("ring_knuckle");
-		joint_state.name.push_back("ring_tip");
-		joint_state.name.push_back("pinky_pitch");
-		joint_state.name.push_back("pinky_knuckle");
-		joint_state.name.push_back("pinky_tip");
-		joint_state.name.push_back("thumb_yaw");
-		joint_state.name.push_back("thumb_roll");
-		joint_state.name.push_back("thumb_pitch");
-		joint_state.name.push_back("thumb_knuckle");
-		joint_state.name.push_back("thumb_tip");
+		// We are currently targeting cobot hand - no wrist ATM
+		//joint_state.name.push_back("wrist_pitch_lower");
+		//joint_state.name.push_back("wrist_pitch_upper");
+		//joint_state.name.push_back("wrist_yaw");
+
+		joint_state.name.push_back("R_Index_Yaw");
+		joint_state.name.push_back("R_Middle_Yaw");
+		joint_state.name.push_back("R_Ring_Yaw");
+		joint_state.name.push_back("R_Pinky_Yaw");
+		joint_state.name.push_back("R_Index_Pitch");
+		joint_state.name.push_back("R_Index_Flexor");
+		//joint_state.name.push_back("R_Index_Tip");
+		joint_state.name.push_back("R_Middle_Pitch");
+		joint_state.name.push_back("R_Middle_Flexor");
+		//joint_state.name.push_back("middle_tip");
+		joint_state.name.push_back("R_Ring_Pitch");
+		joint_state.name.push_back("R_Ring_Flexor");
+		//joint_state.name.push_back("ring_tip");
+		joint_state.name.push_back("R_Pinky_Pitch");
+		joint_state.name.push_back("R_Pinky_Flexor");
+		//joint_state.name.push_back("pinky_tip");
+		joint_state.name.push_back("R_Thumb_Yaw");
+		joint_state.name.push_back("R_Thumb_Roll");
+		joint_state.name.push_back("R_Thumb_Pitch");
+		joint_state.name.push_back("R_Thumb_Flexor");
+		//joint_state.name.push_back("thumb_tip");
 
 		//const std::string t_FingerNames[NUM_FINGERS_ON_HAND] = {"[thumb] ", "[index] ", "[middle]", "[ring]  ", "[pinky] "};
 		//const std::string t_FingerJointNames[NUM_FINGERS_ON_HAND] = {"mcp", "pip", "dip"};
 		//const std::string t_ThumbJointNames[NUM_FINGERS_ON_HAND] = {"cmc", "mcp", "ip "};
 
+		
+		// We are currently targeting cobot hand - no wrist ATM
 		// Wrist pitch is spread across two joints
 
-		joint_state.position.push_back(joint_limits.at("wrist_pitch_lower").apply(-g_euler_joint[0][1]/2)); // "wrist_pitch_lower"
-		joint_state.position.push_back(joint_limits.at("wrist_pitch_upper").apply(-g_euler_joint[0][1]/2)); // "wrist_pitch_upper"
-
-		joint_state.position.push_back(joint_limits.at("wrist_yaw").apply(g_euler_joint[0][2]));  // "wrist_yaw"
-		joint_state.position.push_back(joint_limits.at("index_yaw").apply(g_euler_joint[5][2]));  // "index_yaw"
-		joint_state.position.push_back(joint_limits.at("middle_yaw").apply(g_euler_joint[9][2]));  // "middle_yaw"
-		joint_state.position.push_back(joint_limits.at("ring_yaw").apply(g_euler_joint[13][2])); // "ring_yaw"
-		joint_state.position.push_back(joint_limits.at("pinky_yaw").apply(g_euler_joint[17][2])); // "pinky_yaw"
+		//joint_state.position.push_back(joint_limits.at("wrist_pitch_lower").apply(-g_euler_joint[0][1]/2)); // "wrist_pitch_lower"
+		//joint_state.position.push_back(joint_limits.at("wrist_pitch_upper").apply(-g_euler_joint[0][1]/2)); // "wrist_pitch_upper"
+		//joint_state.position.push_back(joint_limits.at("wrist_yaw").apply(g_euler_joint[0][2]));  // "wrist_yaw"
+		
+		joint_state.position.push_back(joint_limits.at("index_yaw").apply(-g_euler_joint[5][2]));  // "index_yaw"
+		joint_state.position.push_back(joint_limits.at("middle_yaw").apply(-g_euler_joint[9][2]));  // "middle_yaw"
+		joint_state.position.push_back(joint_limits.at("ring_yaw").apply(-g_euler_joint[13][2])); // "ring_yaw"
+		joint_state.position.push_back(joint_limits.at("pinky_yaw").apply(-g_euler_joint[17][2])); // "pinky_yaw"
 		joint_state.position.push_back(joint_limits.at("index_pitch").apply(g_euler_joint[5][1]));  // "index_pitch"
 		joint_state.position.push_back(joint_limits.at("index_knuckle").apply(g_euler_joint[6][1]));  // "index_knuckle"
-		joint_state.position.push_back(joint_limits.at("index_tip").apply(g_euler_joint[7][1]));  // "index_tip"
+		//joint_state.position.push_back(joint_limits.at("index_tip").apply(g_euler_joint[7][1]));  // "index_tip"
 		joint_state.position.push_back(joint_limits.at("middle_pitch").apply(g_euler_joint[9][1]));  // "middle_pitch"
 		joint_state.position.push_back(joint_limits.at("middle_knuckle").apply(g_euler_joint[10][1])); // "middle_knuckle"
-		joint_state.position.push_back(joint_limits.at("middle_tip").apply(g_euler_joint[11][1])); // "middle_tip"
+		//joint_state.position.push_back(joint_limits.at("middle_tip").apply(g_euler_joint[11][1])); // "middle_tip"
 		joint_state.position.push_back(joint_limits.at("ring_pitch").apply(g_euler_joint[13][1])); // "ring_pitch"
 		joint_state.position.push_back(joint_limits.at("ring_knuckle").apply(g_euler_joint[14][1])); // "ring_knuckle"
-		joint_state.position.push_back(joint_limits.at("ring_tip").apply(g_euler_joint[15][1])); // "ring_tip"
+		//joint_state.position.push_back(joint_limits.at("ring_tip").apply(g_euler_joint[15][1])); // "ring_tip"
 		joint_state.position.push_back(joint_limits.at("pinky_pitch").apply(g_euler_joint[17][1])); // "pinky_pitch"
 		joint_state.position.push_back(joint_limits.at("pinky_knuckle").apply(g_euler_joint[18][1])); // "pinky_knuckle"
-		joint_state.position.push_back(joint_limits.at("pinky_tip").apply(g_euler_joint[19][1])); // "pinky_tip"
-		joint_state.position.push_back(joint_limits.at("thumb_yaw").apply(g_euler_joint[1][1]*2.0));  // "thumb_yaw"
+		//joint_state.position.push_back(joint_limits.at("pinky_tip").apply(g_euler_joint[19][1])); // "pinky_tip"
+		RCLCPP_INFO(this->get_logger(), "Raw Thumb Yaw: %f", g_euler_joint[1][1]);
+		float processed = joint_limits.at("thumb_yaw").apply(-M_PI/4 + g_euler_joint[1][1]);
+		RCLCPP_INFO(this->get_logger(), "Processed Thumb Yaw: %f (%f deg)", processed, processed * 180.0 / M_PI);
+		joint_state.position.push_back(joint_limits.at("thumb_yaw").apply(-M_PI/4 + g_euler_joint[1][1]));  // "thumb_yaw"
 		joint_state.position.push_back(joint_limits.at("thumb_roll").apply(-g_euler_joint[1][0]));  // "thumb_roll"
 		joint_state.position.push_back(joint_limits.at("thumb_pitch").apply(-g_euler_joint[1][2]*2.0));  // "thumb_pitch"
 		joint_state.position.push_back(joint_limits.at("thumb_knuckle").apply(-g_euler_joint[2][2])); // "thumb_knuckle"
-		joint_state.position.push_back(joint_limits.at("thumb_tip").apply(-g_euler_joint[3][2])); // "thumb_tip"
+		//joint_state.position.push_back(joint_limits.at("thumb_tip").apply(-g_euler_joint[3][2])); // "thumb_tip"
 
 		// Set timestamp to current ROS time
 		joint_state.header.stamp = this->now();
@@ -248,10 +248,7 @@ private:
 					referenceRotation = tf2::Quaternion(joint.orientation.x, joint.orientation.y, joint.orientation.z, joint.orientation.w);
 					initialized = true;
 				}
-				else if (KeyDown()) {	
-					initialized = false;
-				}
-
+				
 				// Calculate the inverse of the reference rotation
 				tf2::Quaternion referenceRotationInverse = referenceRotation.inverse();
 				
@@ -302,46 +299,6 @@ private:
 
 	bool initialized = false;
 };
-
-
-// Scan for a key press - Used to reset wrist position to center
-bool KeyDown()
-{
-	struct termios oldt, newt;
-	int oldf;
-
-	// Get the current terminal settings
-	tcgetattr(STDIN_FILENO, &oldt);
-
-	// Save the current terminal settings so we can restore them later
-	newt = oldt;
-
-	// Disable canonical mode and echo
-	newt.c_lflag &= ~(ICANON | ECHO);
-
-	// Apply the new terminal settings
-	tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-	// Set the file descriptor for stdin to non-blocking
-	oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-	fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-	// Try to read a character from stdin
-	char ch;
-	ssize_t nread = read(STDIN_FILENO, &ch, 1);
-
-	// Restore the old terminal settings
-	tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-
-	// Restore the file descriptor flags
-	fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-	// Check if a character was read
-	if (nread == 1)
-		return true;
-	else
-		return false;
-}
 
 
 

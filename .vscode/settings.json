@@ -1,0 +1,14 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/dexhand/Dev/dexhandv2_ros2_meta/install/dexhandv2_description/lib/python3.10/site-packages",
+        "/home/dexhand/Dev/dexhandv2_ros2_meta/install/dexhandv2_control/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/dexhand/Dev/dexhandv2_ros2_meta/install/dexhandv2_description/lib/python3.10/site-packages",
+        "/home/dexhand/Dev/dexhandv2_ros2_meta/install/dexhandv2_control/local/lib/python3.10/dist-packages",
+        "/opt/ros/humble/lib/python3.10/site-packages",
+        "/opt/ros/humble/local/lib/python3.10/dist-packages"
+    ]
+}

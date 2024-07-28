@@ -47,6 +47,12 @@ def generate_launch_description():
             package='dexhandv2_manus',
             executable='dexhand_manus',
             name='dexhand_manus',
+            output='screen'),
+        Node(
+            package='dexhandv2_control',
+            executable='high_level_control',
+            name='high_level_control',
             output='screen')
+        
         
     ])
