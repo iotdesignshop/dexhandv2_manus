@@ -39,7 +39,7 @@ def generate_launch_description():
             name='manus_ros2',
             output='screen'),
         Node(
-            package='dexhand_manus_gui',
+            package='dexhandv2_manus_gui',
             executable='gui_node',
             name='gui_node',
             output='screen'),

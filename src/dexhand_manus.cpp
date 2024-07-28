@@ -80,7 +80,7 @@ std::map<std::string, JointLimits> joint_limits = {
 class DexHandManus : public rclcpp::Node
 {
 public:
-	DexHandManus() : Node("dexhand_manus")
+	DexHandManus() : Node("dexhandv2_manus")
 	{
 		RCLCPP_INFO(this->get_logger(), "DexhandManus node started");
 
@@ -214,9 +214,6 @@ private:
 		joint_state.position.push_back(joint_limits.at("pinky_pitch").apply(g_euler_joint[17][1])); // "pinky_pitch"
 		joint_state.position.push_back(joint_limits.at("pinky_knuckle").apply(g_euler_joint[18][1])); // "pinky_knuckle"
 		//joint_state.position.push_back(joint_limits.at("pinky_tip").apply(g_euler_joint[19][1])); // "pinky_tip"
-		RCLCPP_INFO(this->get_logger(), "Raw Thumb Yaw: %f", g_euler_joint[1][1]);
-		float processed = joint_limits.at("thumb_yaw").apply(-M_PI/4 + g_euler_joint[1][1]);
-		RCLCPP_INFO(this->get_logger(), "Processed Thumb Yaw: %f (%f deg)", processed, processed * 180.0 / M_PI);
 		joint_state.position.push_back(joint_limits.at("thumb_yaw").apply(-M_PI/4 + g_euler_joint[1][1]));  // "thumb_yaw"
 		joint_state.position.push_back(joint_limits.at("thumb_roll").apply(-g_euler_joint[1][0]));  // "thumb_roll"
 		joint_state.position.push_back(joint_limits.at("thumb_pitch").apply(-g_euler_joint[1][2]*2.0));  // "thumb_pitch"
